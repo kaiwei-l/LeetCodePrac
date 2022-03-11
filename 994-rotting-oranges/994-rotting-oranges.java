@@ -12,15 +12,6 @@ class Solution {
                 }
             }
         }
-        // for (int i = 0; i < grid.length; i++) {
-        //     for (int j = 0; j < grid[0].length; j++) {
-        //         if (grid[i][j] == 2) {
-        //             res = bfs(grid, ans, freshCount, i, j);
-        //             ans = res[0];
-        //             freshCount = res[1];
-        //         }
-        //     }
-        // }
         res = bfs(grid, ans, freshCount, q);
         ans = res[0];
         freshCount = res[1];
