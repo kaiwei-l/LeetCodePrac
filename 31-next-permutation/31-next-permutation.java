@@ -47,17 +47,17 @@ class Solution {
                 }
                 swap(left, rightMin, nums);
                 
-                int curr = rightMin;
-                int currNext = rightMin + 1;
-                while (currNext != nums.length) {
-                    if (nums[curr] < nums[currNext]) {
-                        swap(curr, currNext, nums);
-                        curr++;
-                        currNext++;
-                    } else {
-                        break;
-                    }
-                }
+                // int curr = rightMin;
+                // int currNext = rightMin + 1;
+                // while (currNext != nums.length) {
+                //     if (nums[curr] < nums[currNext]) {
+                //         swap(curr, currNext, nums);
+                //         curr++;
+                //         currNext++;
+                //     } else {
+                //         break;
+                //     }
+                // }
                 reverse(right, nums.length - 1, nums);
                 break;
             } else {
