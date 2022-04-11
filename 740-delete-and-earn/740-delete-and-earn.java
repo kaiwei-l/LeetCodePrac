@@ -1,19 +1,26 @@
 class Solution {
-    public int deleteAndEarn(int[] nums) {
-        HashMap<Integer, Integer> counter = new HashMap<>();
-        int maxNum = 0;
-        for (int i = 0; i < nums.length; i++) {
-            int currNum = nums[i];
-            counter.put(currNum, counter.getOrDefault(currNum, 0) + currNum);
-            maxNum = Math.max(maxNum, currNum);
-        }
+    HashMap<Integer, Integer> points = new HashMap<>();
+    HashMap<Integer, Integer> cache = new HashMap<>();
+    
+    public int dp(int num) {
+        if (num == 0) return 0;
         
-        int[] maxPoint = new int[maxNum + 1];
-        maxPoint[0] = 0;
-        maxPoint[1] = counter.getOrDefault(1, 0);
-        for (int i = 2; i < maxNum + 1; i++) {
-            maxPoint[i] = Math.max(maxPoint[i - 1], maxPoint[i - 2] + counter.getOrDefault(i, 0));
+        if (num == 1) return points.getOrDefault(1, 0);
+        
+        if (cache.containsKey(num)) return cache.get(num);
+        
+        int gain = points.getOrDefault(num, 0);
+        int profit = Math.max(gain + dp(num - 2), dp(num - 1));
+        cache.put(num, profit);
+        return cache.get(num);
+    }
+    
+    public int deleteAndEarn(int[] nums) {
+        int maxNum = nums[0];
+        for (int num : nums) {
+            points.put(num, points.getOrDefault(num, 0) + num);
+            maxNum = Math.max(maxNum, num);
         }
-        return maxPoint[maxNum];
+        return dp(maxNum);
     }
 }
