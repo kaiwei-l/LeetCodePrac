@@ -1,36 +1,39 @@
-public class Node {
-    int val;
-    Node next;
-    Node prev;
-    public Node(int val, Node next, Node prev) {
+class Node {
+    public int val;
+    public Node next;
+    
+    Node (int val) {
         this.val = val;
-        this.next = next;
-        this.prev = prev;
     }
 }
+
 class Solution {
-    
     public int findTheWinner(int n, int k) {
-        Node head = new Node(1, null, null);
-        Node currNode = head;
-        for (int i = 2; i <= n; i++) {
-            Node newNode = new Node(i, null, null);
-            currNode.next = newNode;
-            newNode.prev = currNode;
-            currNode = currNode.next;
-        }
-        currNode.next = head;
-        head.prev = currNode;
+        if (n == 1) return 1;
+        
+        Node head = new Node(1);
         int size = n;
         Node curr = head;
+        for (int i = 2; i <= n; i++) {
+            Node newNode = new Node(i);
+            curr.next = newNode;
+            curr = curr.next;
+        }
+        curr.next = head;
+        
+        curr = head;
         while (size != 1) {
-            for (int i = 0; i < k; i++) {
+            if (k == 1) {
                 curr = curr.next;
+                size--;
+            } else {
+                for (int i = 0; i < k - 2; i++) {
+                    curr = curr.next;
+                }
+                curr.next = curr.next.next;
+                curr = curr.next;
+                size--;   
             }
-            Node secondLast = curr.prev.prev;
-            secondLast.next = curr;
-            curr.prev = secondLast;
-            size--;
         }
         return curr.val;
     }
