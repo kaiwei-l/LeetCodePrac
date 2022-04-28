@@ -6,14 +6,14 @@ class Solution {
         boolean[][] visited = new boolean[m][n];
         dp[0][0] = grid[0][0];
         visited[0][0] = true;
-        for (int i = 1; i < m; i++) {
-            dp[i][0] = grid[i][0] + dp[i - 1][0];
-            visited[i][0] = true;
-        }
-        for (int j = 1; j < n; j++) {
-            dp[0][j] = grid[0][j] + dp[0][j - 1];
-            visited[0][j] = true;
-        }
+        // for (int i = 1; i < m; i++) {
+        //     dp[i][0] = grid[i][0] + dp[i - 1][0];
+        //     visited[i][0] = true;
+        // }
+        // for (int j = 1; j < n; j++) {
+        //     dp[0][j] = grid[0][j] + dp[0][j - 1];
+        //     visited[0][j] = true;
+        // }
         return backtrack(dp, visited, grid, m - 1, n - 1);
     }
     
