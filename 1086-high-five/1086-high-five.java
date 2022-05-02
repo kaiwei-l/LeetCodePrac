@@ -24,7 +24,7 @@ class Solution {
             ans[indx][1] = sum / 5;
             indx++;
         }
-        Arrays.sort(ans, (a, b) -> Integer.compare(a[0], b[0]));
+        Arrays.sort(ans, (a, b) -> a[0] - b[0]);
         return ans;
     }
 }
