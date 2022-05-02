@@ -1,26 +1,35 @@
 class Solution {
-    HashMap<Integer, Integer> points = new HashMap<>();
-    HashMap<Integer, Integer> cache = new HashMap<>();
-    
-    public int dp(int num) {
-        if (num == 0) return 0;
+    public int deleteAndEarn(int[] nums) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int maxNum = Integer.MIN_VALUE;
+        for (int num : nums) {
+            if (num >= maxNum) maxNum = num;
+            map.put(num, map.getOrDefault(num, 0) + num);
+        }
         
-        if (num == 1) return points.getOrDefault(1, 0);
-        
-        if (cache.containsKey(num)) return cache.get(num);
-        
-        int gain = points.getOrDefault(num, 0);
-        int profit = Math.max(gain + dp(num - 2), dp(num - 1));
-        cache.put(num, profit);
-        return cache.get(num);
+        HashMap<Integer, Integer> memo = new HashMap<>();
+        memo.put(0, 0);
+        if (map.containsKey(1)) {
+            memo.put(1, map.get(1));
+        } else {
+            memo.put(1, 0);
+        }
+        return maxPoint(maxNum, memo, map);
     }
     
-    public int deleteAndEarn(int[] nums) {
-        int maxNum = nums[0];
-        for (int num : nums) {
-            points.put(num, points.getOrDefault(num, 0) + num);
-            maxNum = Math.max(maxNum, num);
+    public int maxPoint(Integer maxNum, HashMap<Integer, Integer> memo, HashMap<Integer, Integer> map) {
+        if (!memo.containsKey(maxNum)) {
+            if (map.containsKey(maxNum)) {
+                Integer gain = Math.max(map.get(maxNum) + maxPoint(maxNum - 2, memo, map), maxPoint(maxNum - 1, memo, map));
+                memo.put(maxNum, gain);
+                return memo.get(maxNum);
+            } else {
+                Integer gain = Math.max(maxPoint(maxNum - 2, memo, map), maxPoint(maxNum - 1, memo, map));
+                memo.put(maxNum, gain);
+                return memo.get(maxNum);
+            }
+        } else {
+            return memo.get(maxNum);
         }
-        return dp(maxNum);
     }
 }
