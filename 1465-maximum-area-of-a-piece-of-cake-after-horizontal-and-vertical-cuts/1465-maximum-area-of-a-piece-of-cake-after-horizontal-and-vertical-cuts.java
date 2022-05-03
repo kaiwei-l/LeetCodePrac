@@ -7,10 +7,10 @@ class Solution {
         long verticalDiff = Math.max(verticalCuts[0] - 0, w - verticalCuts[verticalCuts.length - 1]);
         
         for (int i = 1; i < horizontalCuts.length; i++) {
-            horizontalDiff = Math.max(horizontalDiff, horizontalCuts[i] - horizontalCuts[i - 1]) % mod;
+            horizontalDiff = Math.max(horizontalDiff, horizontalCuts[i] - horizontalCuts[i - 1]);
         }
         for (int j = 1; j < verticalCuts.length; j++) {
-            verticalDiff = Math.max(verticalDiff, verticalCuts[j] - verticalCuts[j - 1]) % mod;
+            verticalDiff = Math.max(verticalDiff, verticalCuts[j] - verticalCuts[j - 1]);
         }
         return (int)(horizontalDiff * verticalDiff % mod);
     }
