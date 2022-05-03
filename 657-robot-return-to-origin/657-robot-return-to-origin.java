@@ -1,20 +1,25 @@
 class Solution {
-    public boolean judgeCircle(String moves) {
-        int row = 0;
-        int col = 0;
-        for (int i = 0; i < moves.length(); i++) {
-            char currDir = moves.charAt(i);
-            if (currDir == 'U') {
-                row++;
-            } else if (currDir == 'D') {
-                row--;
-            } else if (currDir == 'L') {
-                col--;
-            } else {
-                col++;
-            }
+    public void move(Character currMove, int[] position) {
+        if (currMove.equals('U')) {
+            position[0] += 1;
+        } else if (currMove.equals('D')) {
+            position[0] -= 1;
+        } else if (currMove.equals('L')) {
+            position[1] -= 1;
+        } else {
+            position[1] += 1;
         }
-        if (row == 0 && col == 0) return true;
+    }
+    public boolean judgeCircle(String moves) {
+        int[] position = new int[2];
+        position[0] = 0;
+        position[1] = 0;
+        for (int i = 0; i < moves.length(); i++) {
+            move(moves.charAt(i), position);
+        }
+        if (position[0] == 0 && position[1] == 0) {
+            return true;
+        }
         return false;
     }
 }
