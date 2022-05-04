@@ -1,24 +1,23 @@
 class Solution {
     public List<String> topKFrequent(String[] words, int k) {
-        PriorityQueue<Pair<String, Integer>> maxHeap = new PriorityQueue<>((a, b) -> {
-            int cmp = b.getValue() - a.getValue();
-            if (cmp == 0) cmp = a.getKey().compareTo(b.getKey());
-            return cmp;
+        PriorityQueue<Pair<String, Integer>> freq = new PriorityQueue<>((a, b) -> {
+            if (a.getValue() == b.getValue()) return b.getKey().compareTo(a.getKey());
+            return a.getValue() - b.getValue();
         });
-        HashMap<String, Integer> counter = new HashMap<>();
-        for (String s : words) {
-            counter.put(s, counter.getOrDefault(s, 0) + 1);
-        }
         
-        for (String key : counter.keySet()) {
-            maxHeap.add(new Pair(key, counter.get(key)));
+        HashMap<String, Integer> map = new HashMap<>();
+        for (String word : words) {
+            map.put(word, map.getOrDefault(word, 0) + 1);
         }
-        
-        ArrayList<String> ans = new ArrayList<>();
-        for (int i = 0; i < k; i++) {
-            Pair<String, Integer> p = maxHeap.poll();
-            ans.add(p.getKey());
+        for (String key : map.keySet()) {
+            freq.add(new Pair(key, map.get(key)));
+            if (freq.size() > k) freq.poll();
         }
-        return ans;
+        List<String> list = new ArrayList<>();
+        while (freq.size() != 0) {
+            list.add(freq.poll().getKey());
+        }
+        Collections.reverse(list);
+        return list;
     }
 }
