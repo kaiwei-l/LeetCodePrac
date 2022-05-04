@@ -1,46 +1,47 @@
 class MyQueue {
-    int size;
     ArrayDeque<Integer> s1;
     ArrayDeque<Integer> s2;
+    int size;
     
     public MyQueue() {
-        this.size = 0;
-        this.s1 = new ArrayDeque<>();
-        this.s2 = new ArrayDeque<>();
-        
+        s1 = new ArrayDeque<>();
+        s2 = new ArrayDeque<>();
+        size = 0;
     }
     
     public void push(int x) {
-        this.s1.addLast(x);
-        this.size++;
+        s1.addLast(x);
+        size++;
     }
     
     public int pop() {
-        while (!this.s1.isEmpty()) {
-            this.s2.addLast(this.s1.removeLast());
+        if (s2.isEmpty()) {
+            while (!s1.isEmpty()) {
+                s2.addLast(s1.removeLast());
+            }
+            size--;
+            return s2.removeLast();
+        } else {
+            size--;
+            return s2.removeLast();
         }
-        int ans = this.s2.removeLast();
-        while (!this.s2.isEmpty()) {
-            this.s1.addLast(this.s2.removeLast());
-        }
-        this.size--;
-        return ans;
     }
     
     public int peek() {
-        while (!this.s1.isEmpty()) {
-            this.s2.addLast(this.s1.removeLast());
+        if (s2.isEmpty()) {
+            while (!s1.isEmpty()) {
+                s2.addLast(s1.removeLast());
+            }
+            int ans = s2.getLast();
+            return ans;
+        } else {
+            int ans = s2.getLast();
+            return ans;
         }
-        int ans = this.s2.getLast();
-        while (!this.s2.isEmpty()) {
-            this.s1.addLast(this.s2.removeLast());
-        }
-        return ans;
     }
     
     public boolean empty() {
-        if (this.size == 0) return true;
-        return false;
+        return size == 0;
     }
 }
 
