@@ -5,21 +5,21 @@ class Solution {
             numsCopy[i] = nums[i];
         }
         
-        Arrays.sort(numsCopy, (Integer a, Integer b) -> {
-            String str1 = String.valueOf(a);
-            String str2 = String.valueOf(b);
-            Long x = Long.parseLong(str1 + str2);
-            Long y = Long.parseLong(str2 + str1);
-            if (x == y) return 0;
-            if (x < y) return 1;
-            return -1;
+        Arrays.sort(numsCopy, (a, b) -> {
+            String x = String.valueOf(a);
+            String y = String.valueOf(b);
+            Long leftRight = Long.valueOf(x + y);
+            Long rightLeft = Long.valueOf(y + x);
+            if (leftRight == rightLeft) return 0;
+            if (leftRight > rightLeft) return -1;
+            return 1;
         });
         
+        StringBuilder s = new StringBuilder();
         if (numsCopy[0] == 0) return "0";
-        StringBuilder ans = new StringBuilder();
         for (int num : numsCopy) {
-            ans.append(num);
+            s.append(num);
         }
-        return ans.toString();
+        return s.toString();
     }
 }
