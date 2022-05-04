@@ -1,25 +1,27 @@
 class Solution {
-    HashMap<Integer, Integer> memo = new HashMap<>();
-    
     public int numDecodings(String s) {
-        return recursiveWithMemo(0, s);
+        if (s.charAt(0) == '0') return 0;
+        if (s.length() == 1) return 1;
+        int[] memo = new int[s.length() + 1];
+        memo[0] = 1;
+        memo[1] = (s.charAt(0) == '0') ? 0 : 1;
+        
+        for (int i = 2; i < memo.length; i++) {
+            int strIndx = i - 1;
+            if (s.charAt(strIndx) != '0') {
+                memo[i] = memo[i - 1];
+            } else {
+                memo[i] = 0;
+            }
+            
+            int twoDigit = Integer.valueOf(s.substring(strIndx - 1, strIndx + 1));
+            if (twoDigit <= 26 && twoDigit >= 10) {
+                memo[i] += memo[i - 2];
+            }
+        }
+        return memo[s.length()];
     }
     
-    public int recursiveWithMemo(int index, String str) {
-        if (memo.containsKey(index)) return memo.get(index);
-        
-        if (index == str.length()) return 1;
-        
-        if (str.charAt(index) == '0') return 0;
-        
-        if (index == str.length() - 1) return 1;
-        
-        int ans = recursiveWithMemo(index + 1, str);
-        if (Integer.parseInt(str.substring(index, index + 2)) <= 26) {
-            ans += recursiveWithMemo(index + 2, str);
-        }
-        
-        memo.put(index, ans);
-        return ans;
-    }
+    
+    
 }
