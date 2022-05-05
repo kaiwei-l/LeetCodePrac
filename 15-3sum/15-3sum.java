@@ -1,36 +1,39 @@
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
-        List<List<Integer>> ans = new ArrayList<>();
         Arrays.sort(nums);
-        for (int i = 0; i < nums.length && nums[i] <= 0; i++) {
-            if (i == 0 || nums[i - 1] != nums[i]) {
-                twoSum(nums, i, ans);
+        List<List<Integer>> ans = new ArrayList<>();
+        
+        if (nums.length < 3) return ans;
+        
+        int i = 0;
+        while (i < nums.length - 2) {
+            int goal = 0 - nums[i];
+            int left = i + 1;
+            int right = nums.length - 1;
+            twoSum(i, left, right, goal, ans, nums);
+            i++;
+            while (i < nums.length && nums[i - 1] == nums[i]) {
+                i++;
             }
         }
         return ans;
     }
-    
-    public void twoSum(int[] nums, int i, List<List<Integer>> ans) {
-        int low = i + 1;
-        int high = nums.length - 1;
-        int goal = -1 * nums[i];
-        while (low < high) {
-            int sum = nums[low] + nums[high];
-            if (sum == goal) {
-                ArrayList<Integer> pair = new ArrayList<>();
-                pair.add(nums[i]);
-                pair.add(nums[low]);
-                pair.add(nums[high]);
-                ans.add(pair);
-                low++;
-                high--;
-                while (low < high && nums[low] == nums[low - 1]) {
-                    low++;
+    public void twoSum(int start, int left, int right, int goal, List<List<Integer>> ans, int[] nums) {
+        while(left < right) {
+            if (nums[left] + nums[right] == goal) {
+                List<Integer> triple = new ArrayList<>();
+                triple.add(nums[start]);
+                triple.add(nums[left]);
+                triple.add(nums[right]);
+                ans.add(triple);
+                left++;
+                while (left < right && nums[left] == nums[left - 1]) {
+                    left++;
                 }
-            } else if (sum < goal) {
-                low++;
+            } else if (nums[left] + nums[right] < goal) {
+                left++;
             } else {
-                high--;
+                right--;
             }
         }
     }
