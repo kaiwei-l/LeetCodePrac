@@ -6,7 +6,7 @@ class SORTracker {
     public SORTracker() {
         k = 0;
         minHeap = new PriorityQueue<>((a, b) -> {
-            if (a.getValue().equals(b.getValue())) return b.getKey().compareTo((String)a.getKey());
+            if (a.getValue().equals(b.getValue())) return b.getKey().compareTo(a.getKey());
             return a.getValue().compareTo(b.getValue());
         });
         maxHeap = new PriorityQueue<>((a, b) -> {
