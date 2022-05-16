@@ -1,40 +1,37 @@
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> ans = new ArrayList<List<Integer>>();
+        int n = nums.length;
+        if (n < 3) return ans;
         Arrays.sort(nums);
-        List<List<Integer>> ans = new ArrayList<>();
         
-        if (nums.length < 3) return ans;
-        
-        int i = 0;
-        while (i < nums.length - 2) {
-            int goal = 0 - nums[i];
-            int left = i + 1;
-            int right = nums.length - 1;
-            twoSum(i, left, right, goal, ans, nums);
-            i++;
-            while (i < nums.length && nums[i - 1] == nums[i]) {
-                i++;
+        int indx = 0;
+        while (indx < n - 2) {
+            int complement = -1 * nums[indx];
+            int left = indx + 1;
+            int right = n - 1;
+            while (left < right) {
+                if (nums[left] + nums[right] == complement) {
+                    List<Integer> res = new ArrayList<Integer>();
+                    res.add(nums[indx]);
+                    res.add(nums[left]);
+                    res.add(nums[right]);
+                    ans.add(res);
+                    left++;
+                    while (left < right && nums[left] == nums[left - 1]) {
+                        left++;
+                    }
+                } else if (nums[left] + nums[right] < complement) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+            indx++;
+            while (indx < n - 2 && nums[indx] == nums[indx - 1]) {
+                indx++;
             }
         }
         return ans;
-    }
-    public void twoSum(int start, int left, int right, int goal, List<List<Integer>> ans, int[] nums) {
-        while(left < right) {
-            if (nums[left] + nums[right] == goal) {
-                List<Integer> triple = new ArrayList<>();
-                triple.add(nums[start]);
-                triple.add(nums[left]);
-                triple.add(nums[right]);
-                ans.add(triple);
-                left++;
-                while (left < right && nums[left] == nums[left - 1]) {
-                    left++;
-                }
-            } else if (nums[left] + nums[right] < goal) {
-                left++;
-            } else {
-                right--;
-            }
-        }
     }
 }
