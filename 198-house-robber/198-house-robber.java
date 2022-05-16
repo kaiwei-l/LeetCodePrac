@@ -1,22 +1,18 @@
 class Solution {
     public int rob(int[] nums) {
-        HashMap<Integer, Integer> memo = new HashMap<>();
-        return dp(0, nums, memo);
-    }
-    
-    public int dp(int curr, int[] nums, HashMap<Integer, Integer> memo) {
-        if (curr >= nums.length) {
-            return 0;
+        int n = nums.length;
+        if (n == 1) {
+            return nums[0];
         }
-        if (memo.containsKey(curr)) {
-            return memo.get(curr);
+        if (n == 2) {
+            return Math.max(nums[0], nums[1]);
         }
-        if (curr == nums.length - 1) {
-            memo.put(curr, nums[curr]);
-            return nums[curr];
+        int[] memo = new int[n];
+        memo[0] = nums[0];
+        memo[1] = Math.max(nums[1], memo[0]);
+        for (int i = 2; i < n; i++) {
+            memo[i] = Math.max(memo[i - 1], nums[i] + memo[i - 2]);
         }
-        int temp = Math.max(nums[curr] + dp(curr + 2, nums, memo), dp(curr + 1, nums, memo));
-        memo.put(curr, temp);
-        return temp;
+        return memo[n - 1];
     }
 }
