@@ -1,21 +1,17 @@
 class Solution {
     public boolean canJump(int[] nums) {
         int n = nums.length;
-        Boolean[] memo = new Boolean[n];
         
-        memo[n - 1] = true;
+        int leftMost = n - 1;
         for (int i = n - 2; i >= 0; i--) {
             for (int step = 1; step <= nums[i]; step++) {
-                if (i + step < n && memo[i + step] == true) {
-                    memo[i] = true;
+                if (i + step >= leftMost) {
+                    leftMost = i;
                     break;
                 }
             }
-            if (memo[i] == null) {
-                memo[i] = false;
-            }
         }
-        return memo[0];
+        return leftMost == 0;
     }
     
     public boolean dp(Boolean[] memo, int[] nums, int indx) {
