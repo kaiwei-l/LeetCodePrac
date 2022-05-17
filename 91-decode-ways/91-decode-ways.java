@@ -1,27 +1,31 @@
 class Solution {
     public int numDecodings(String s) {
-        if (s.charAt(0) == '0') return 0;
-        if (s.length() == 1) return 1;
         int[] memo = new int[s.length() + 1];
-        memo[0] = 1;
-        memo[1] = (s.charAt(0) == '0') ? 0 : 1;
-        
-        for (int i = 2; i < memo.length; i++) {
-            int strIndx = i - 1;
-            if (s.charAt(strIndx) != '0') {
-                memo[i] = memo[i - 1];
-            } else {
-                memo[i] = 0;
-            }
-            
-            int twoDigit = Integer.valueOf(s.substring(strIndx - 1, strIndx + 1));
-            if (twoDigit <= 26 && twoDigit >= 10) {
-                memo[i] += memo[i - 2];
-            }
-        }
-        return memo[s.length()];
+        Arrays.fill(memo, -1);
+        return dp(s, 0, memo);
     }
     
-    
-    
+    public int dp(String s, int indx, int[] memo) {
+        if (memo[indx] != -1) {
+            return memo[indx];
+        }
+        
+        if (indx == s.length()) {
+            return 1;
+        }
+        
+        if (s.charAt(indx) == '0') {
+            return 0;
+        }
+        
+        if (indx == s.length() - 1) {
+            return 1;
+        }
+        int res = dp(s, indx + 1, memo);
+        if (Integer.valueOf(s.substring(indx, indx + 2)) <= 26) {
+            res += dp(s, indx + 2, memo);
+        }
+        memo[indx] = res;
+        return res;
+    }
 }
