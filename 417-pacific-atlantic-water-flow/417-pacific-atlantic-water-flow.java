@@ -36,17 +36,20 @@ class Solution {
     
     public boolean[][] bfs(ArrayDeque<Pair<Integer, Integer>> q, int[][] heights) {
         boolean[][] canGetOcean = new boolean[m][n];
+        HashSet<Pair<Integer, Integer>> visited = new HashSet<>();
         while (!q.isEmpty()) {
             Pair<Integer, Integer> node = q.removeFirst();
             int row = node.getKey();
             int col = node.getValue();
             canGetOcean[row][col] = true;
+            visited.add(node);
             for (int[] dir : directions) {
                 int newRow = row + dir[0];
                 int newCol = col + dir[1];
                 if (newRow >= 0 && newRow < m && newCol >= 0 && newCol < n) {
-                    if (!canGetOcean[newRow][newCol]) {
+                    if (!visited.contains(new Pair(newRow, newCol))) {
                         if (heights[newRow][newCol] >= heights[row][col]) {
+                            visited.add(new Pair(newRow, newCol));
                             q.addLast(new Pair(newRow, newCol));
                         }
                     }
