@@ -16,8 +16,6 @@ class Solution {
         ArrayDeque<Integer> ans = new ArrayDeque<Integer>();
         for (int i = 0; i < numCourses; i++) {
             if (color.get(i) == 1) {
-                ArrayDeque<Integer> stack = new ArrayDeque<>();
-                stack.addLast(i);
                 dfs(adjList, color, ans, i);
                 if (hasCycle) return false;
             }
