@@ -16,7 +16,7 @@ class Solution {
         
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (rows[i] == 1) Arrays.fill(matrix[i], 0);
+                if (rows[i] == 1) matrix[i][j] = 0;
                 if (cols[j] == 1) matrix[i][j] = 0;
             }
         }
