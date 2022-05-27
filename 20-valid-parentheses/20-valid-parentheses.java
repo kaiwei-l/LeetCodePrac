@@ -1,25 +1,23 @@
 class Solution {
     public boolean isValid(String s) {
-        HashMap<Character, Character> map = new HashMap<>();
-        map.put(')', '(');
-        map.put(']', '[');
-        map.put('}', '{');
+        HashMap<Character, Character> type = new HashMap<>();
+        type.put(')', '(');
+        type.put(']', '[');
+        type.put('}', '{');
         
         ArrayDeque<Character> stack = new ArrayDeque<>();
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (c == '(' || c == '[' || c == '{') {
-                stack.addLast(c);
+        for (char b : s.toCharArray()) {
+            if (b == '(' || b == '[' || b == '{') {
+                stack.addLast(b);
             } else {
                 if (stack.isEmpty()) {
                     return false;
-                }
-                char back = stack.removeLast();
-                if (back != map.get(c)) {
-                    return false;
+                } else {
+                    char last = stack.removeLast();
+                    if (type.get(b) != last) return false;
                 }
             }
         }
-        return (stack.isEmpty()) ? true : false;
+        return (stack.size() == 0) ? true : false;
     }
 }
