@@ -1,66 +1,72 @@
 class Trie {
     HashMap<Character, Trie> map;
-    List<String> list;
+    String word;
     
     public Trie() {
         this.map = new HashMap<>();
-        this.list = new ArrayList<>();
+        this.word = null;
     }
 }
-
 class Solution {
-    private HashSet<String> ans = new HashSet<>();
+    int[][] directions = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+    Trie root;
+    int m;
+    int n;
+    HashSet<Pair<Integer, Integer>> visited;
+    List<String> ans;
     
     public List<String> findWords(char[][] board, String[] words) {
-        Trie root = new Trie();
-        for (String s : words) {
-            insert(s, root);
+        ans = new ArrayList<>();
+        root = new Trie();
+        m = board.length;
+        n = board[0].length;
+        
+        for (String w : words) {
+            insert(root, w);
         }
-        int m = board.length;
-        int n = board[0].length;
+        
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                backtrack(board, i, j, root, m, n);
-            }
-        }
-        return new ArrayList<String>(ans);
-    }
-    
-    public void backtrack(char[][] board, int i, int j, Trie root, int m, int n) {
-        Trie node = root;
-        Character c = board[i][j];
-        board[i][j] = '1';
-        if (node.map.containsKey(c)) {
-            node = node.map.get(c);
-            for (String w : node.list) {
-                ans.add(w);
-            }
-            for (int rowIncre = -1; rowIncre <= 1; rowIncre++) {
-                int newRow = i + rowIncre;
-                if (newRow >= 0 && newRow < m && board[newRow][j] != '1') {
-                    backtrack(board, newRow, j, node, m, n);
-                }
-            }
-            
-            for (int colIncre = -1; colIncre <= 1; colIncre++) {
-                int newCol = j + colIncre;
-                if (newCol >= 0 && newCol < n && board[i][newCol] != '1') {
-                    backtrack(board, i, newCol, node, m, n);
+                if (root.map.containsKey(board[i][j])) {
+                    visited = new HashSet<>();
+                    visited.add(new Pair(i, j));
+                    search(new Pair(i, j), root, board);
                 }
             }
         }
-        board[i][j] = c;
+        return ans;
     }
     
-    public void insert(String s, Trie root) {
+    public void search(Pair<Integer, Integer> point, Trie parent, char[][] board) {
+        int row = point.getKey();
+        int col = point.getValue();
+        char c = board[row][col];
+        Trie node = parent.map.get(c);
+        if (node.word != null) {
+            ans.add(node.word);
+            node.word = null;
+        }
+        for (int[] dir : directions) {
+            int newRow = row + dir[0];
+            int newCol = col + dir[1];
+            Pair<Integer, Integer> next = new Pair(newRow, newCol);
+            if (newRow >= 0 && newRow < m && newCol >= 0 && newCol < n && !visited.contains(next) && node.map.containsKey(board[newRow][newCol])) {
+                visited.add(next);
+                search(next, node, board);
+            }
+        }
+        visited.remove(point);
+        if (node.map.size() == 0) parent.map.remove(c);
+    }
+    
+    public void insert(Trie root, String word) {
         Trie node = root;
-        for (int i = 0; i < s.length(); i++) {
-            Character c = s.charAt(i);
+        for (Character c : word.toCharArray()) {
             if (!node.map.containsKey(c)) {
                 node.map.put(c, new Trie());
             }
             node = node.map.get(c);
         }
-        node.list.add(s);
+        node.word = word;
     }
 }
