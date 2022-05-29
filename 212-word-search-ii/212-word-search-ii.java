@@ -56,7 +56,7 @@ class Solution {
             }
         }
         visited.remove(point);
-        //if (node.map.size() == 0) parent.map.remove(c);
+        if (node.map.size() == 0) parent.map.remove(c);
     }
     
     public void insert(Trie root, String word) {
