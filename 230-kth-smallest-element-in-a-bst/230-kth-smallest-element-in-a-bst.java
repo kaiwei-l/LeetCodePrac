@@ -21,8 +21,7 @@ class Solution {
         maxHeap = new PriorityQueue<>((a, b) -> b.compareTo(a));
         size = k;
         traversal(root);
-        int ans = maxHeap.poll();
-        return ans;
+        return maxHeap.poll();
     }
     
     public void traversal(TreeNode node) {
