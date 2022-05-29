@@ -15,22 +15,20 @@
  */
 class Solution {
     int size;
-    PriorityQueue<Integer> maxHeap;
+    ArrayList<Integer> arr;
     
     public int kthSmallest(TreeNode root, int k) {
-        maxHeap = new PriorityQueue<>((a, b) -> b.compareTo(a));
+        arr = new ArrayList<>();
         size = k;
         traversal(root);
-        return maxHeap.poll();
+        return arr.get(k - 1);
     }
     
     public void traversal(TreeNode node) {
         if (node == null) return;
-        maxHeap.add(node.val);
-        if (maxHeap.size() > size) {
-            maxHeap.poll();
-        }
+        if (arr.size() == size) return;
         traversal(node.left);
+        arr.add(node.val);
         traversal(node.right);
         return;
     }
