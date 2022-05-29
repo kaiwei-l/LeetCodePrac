@@ -14,7 +14,7 @@
  * }
  */
 class Solution {
-    private int preIndx = -1;
+    private int preIndx = 0;
     private int size;
     private int[] preOrder;
     private int[] inOrder;
@@ -34,8 +34,8 @@ class Solution {
     
     public TreeNode buildAux(HashMap<Integer, Integer> preToIn, int left, int right) {
         if (left > right) return null;
-        preIndx++;
         TreeNode node = new TreeNode(preOrder[preIndx]);
+        preIndx++;
         int inOrderIndx = preToIn.get(node.val);
         node.left = buildAux(preToIn, left, inOrderIndx - 1);
         node.right = buildAux(preToIn, inOrderIndx + 1, right);
