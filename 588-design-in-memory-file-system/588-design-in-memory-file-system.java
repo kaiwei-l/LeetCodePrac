@@ -1,62 +1,79 @@
 class Dir {
-    HashMap <String, Dir> dirs = new HashMap<>();
-    HashMap <String, String> files = new HashMap<>();
+    HashMap<String, Dir> dir;
+    HashMap<String, String> files;
+    public Dir() {
+        dir = new HashMap<>();
+        files = new HashMap<>();
+    }
 }
+
 class FileSystem {
-    public Dir root;
+    Dir root;
     
     public FileSystem() {
-        this.root = new Dir();
+        root = new Dir();    
     }
     
     public List<String> ls(String path) {
-        Dir t = this.root;
-        List <String> files = new ArrayList<>();
-        if (!path.equals("/")) {
+        Dir p = root;
+        List<String> res = new ArrayList<>();
+        
+        if (path.equals("/")) {
+            res.addAll(new ArrayList<>(p.dir.keySet()));
+            res.addAll(new ArrayList<>(p.files.keySet()));
+        } else {
             String[] d = path.split("/");
-            for (int i = 1; i < d.length - 1; i++) {
-                t = t.dirs.get(d[i]);
+            int n = d.length;
+            for (int i = 1; i < n - 1; i++) {
+                p = p.dir.get(d[i]);
             }
-            if (t.files.containsKey(d[d.length - 1])) {
-                files.add(d[d.length - 1]);
-                return files;
+            if (p.files.containsKey(d[n - 1])) {
+                res.add(d[n - 1]);
+                return res;
             } else {
-                t = t.dirs.get(d[d.length - 1]);
+                p = p.dir.get(d[n - 1]);
+                res.addAll(new ArrayList<>(p.dir.keySet()));
+                res.addAll(new ArrayList<>(p.files.keySet()));
             }
         }
-        files.addAll(new ArrayList<>(t.dirs.keySet()));
-        files.addAll(new ArrayList<>(t.files.keySet()));
-        Collections.sort(files);
-        return files;
+        Collections.sort(res);
+        return res;
     }
     
     public void mkdir(String path) {
-        Dir t = root;
+        Dir p = root;
         String[] d = path.split("/");
-        for (int i = 1; i < d.length; i++) {
-            if (!t.dirs.containsKey(d[i])) {
-                t.dirs.put(d[i], new Dir());
+        int n = d.length;
+        for (int i = 1; i < n; i++) {
+            if (!p.dir.containsKey(d[i])) {
+                p.dir.put(d[i], new Dir());
             }
-            t = t.dirs.get(d[i]);
+            p = p.dir.get(d[i]);
         }
     }
     
     public void addContentToFile(String filePath, String content) {
-        Dir t = root;
+        Dir p = root;
         String[] d = filePath.split("/");
-        for (int i = 1; i < d.length - 1; i++) {
-            t = t.dirs.get(d[i]);
+        int n = d.length;
+        for (int i = 1; i < n - 1; i++) {
+            p = p.dir.get(d[i]);
         }
-        t.files.put(d[d.length - 1], t.files.getOrDefault(d[d.length - 1], "") + content);
+        if (p.files.containsKey(d[n - 1])) {
+            p.files.put(d[n - 1], p.files.get(d[n - 1]) + content);
+        } else {
+            p.files.put(d[n - 1], content);
+        }
     }
     
     public String readContentFromFile(String filePath) {
-        Dir t = this.root;
+        Dir p = root;
         String[] d = filePath.split("/");
-        for (int i = 1; i < d.length - 1; i++) {
-            t = t.dirs.get(d[i]);
+        int n = d.length;
+        for (int i = 1; i < n - 1; i++) {
+            p = p.dir.get(d[i]);
         }
-        return t.files.get(d[d.length - 1]);
+        return p.files.get(d[n - 1]);
     }
 }
 
