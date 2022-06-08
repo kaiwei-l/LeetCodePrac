@@ -1,37 +1,28 @@
 class Solution {
     List<List<Integer>> ans;
-    
     public List<List<Integer>> permute(int[] nums) {
-        HashMap<Integer, Integer> freq = new HashMap<>();
         ans = new ArrayList<>();
+        ArrayList<Integer> p = new ArrayList<>();
+        HashMap<Integer, Integer> map = new HashMap<>();
         for (int num : nums) {
-            freq.put(num, 1);
+            map.put(num, 1);
         }
-        for (Integer key : freq.keySet()) {
-            freq.put(key, 0);
-            List<Integer> curr = new ArrayList<Integer>();
-            curr.add(key);
-            backtrack(freq, curr, nums.length);
-            freq.put(key, 1);
-            curr.remove(curr.size() - 1);
-        }
+        backtrack(nums, p, 0, map);
         return ans;
     }
     
-    public void backtrack(HashMap<Integer, Integer> freq, List<Integer> curr, int goal) {
-        if (curr.size() == goal) {
-            List<Integer> res = new ArrayList<>(curr);
-            ans.add(res);
+    public void backtrack(int[] nums, ArrayList<Integer> p, int start, HashMap<Integer, Integer> map) {
+        if (start == nums.length) {
+            ans.add(new ArrayList<Integer>(p));
             return;
-        } else {
-            for (Integer key : freq.keySet()) {
-                if (freq.get(key) == 1) {
-                    curr.add(key);
-                    freq.put(key, 0);
-                    backtrack(freq, curr, goal);
-                    curr.remove(curr.size() - 1);
-                    freq.put(key, 1);
-                }
+        }
+        for (int num : map.keySet()) {
+            if (map.get(num) == 1) {
+                map.put(num, 0);
+                p.add(num);
+                backtrack(nums, p, start + 1, map);
+                map.put(num, 1);
+                p.remove(p.size() - 1);
             }
         }
     }
