@@ -1,24 +1,27 @@
 class Solution {
     public int[][] merge(int[][] intervals) {
+        if (intervals.length == 0) return new int[0][2];
+        
         Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
         ArrayDeque<int[]> s = new ArrayDeque<>();
         for (int[] i : intervals) {
-            if (s.isEmpty()) {
+            if (s.isEmpty() || s.getLast()[1] < i[0]) {
                 s.addLast(i);
             } else {
-                while (!s.isEmpty()) {
+                while (!s.isEmpty() && s.getLast()[1] >= i[0]) {
                     int[] prev = s.removeLast();
-                    if (prev[1] < i[0]) {
-                        s.addLast(prev);
-                        break;
-                    } else {
-                        i[0] = Math.min(i[0], prev[0]);
-                        i[1] = Math.max(i[1], prev[1]);
-                    }
+                    int newStart = Math.min(prev[0], i[0]);
+                    int newEnd = Math.max(prev[1], i[1]);
+                    i[0] = newStart;
+                    i[1] = newEnd;
                 }
                 s.addLast(i);
             }
         }
-        return s.toArray(new int[s.size()][2]);
+        int[][] ans = new int[s.size()][2];
+        for(int i = 0; i < ans.length; i++) {
+            ans[i] = s.removeFirst();
+        }
+        return ans;
     }
 }
