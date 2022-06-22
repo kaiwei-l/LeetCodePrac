@@ -1,36 +1,35 @@
 class Solution {
     public String minWindow(String s, String t) {
         if (s.length() < t.length()) return "";
-        if (s.length() == 0 || t.length() == 0) return "";
-        
-        HashMap<Character, Integer> tCount = new HashMap<>();
+        HashMap<Character, Integer> countT = new HashMap<>();
         for (Character c : t.toCharArray()) {
-            tCount.put(c, tCount.getOrDefault(c, 0) + 1);
+            countT.put(c, countT.getOrDefault(c, 0) + 1);
         }
-        
-        int need = tCount.size();
-        int formed = 0;
-        int ans = Integer.MAX_VALUE;
-        int start = 0;
-        int end = 0;
+        int uniqueCount = countT.size();
+        HashMap<Character, Integer> countS = new HashMap<>();
+        int minLeft = 0;
+        int minRight = 0;
+        int len = s.length() + 1;
         int left = 0;
-        HashMap<Character, Integer> window = new HashMap<>();
+        int currCount = 0;
         for (int right = 0; right < s.length(); right++) {
             Character c = s.charAt(right);
-            window.put(c, window.getOrDefault(c, 0) + 1);
-            if (tCount.containsKey(c) && tCount.get(c).equals(window.get(c))) formed++;
-            while (formed == need && left <= right) {
-                if (ans > right - left + 1) {
-                    ans = right - left + 1;
-                    start = left;
-                    end = right;
+            countS.put(c, countS.getOrDefault(c, 0) + 1);
+            if (countT.containsKey(c) && countT.get(c).equals(countS.get(c))) currCount++;
+            while (left <= right && currCount == uniqueCount) {
+                if (right - left + 1 < len) {
+                    len = right - left + 1;
+                    minLeft = left;
+                    minRight = right;
                 }
-                c = s.charAt(left);
-                window.put(c, window.get(c) - 1);
+                Character leftC = s.charAt(left);
+                countS.put(leftC, countS.get(leftC) - 1);
+                if (countT.containsKey(leftC) && countS.get(leftC).compareTo(countT.get(leftC)) < 0) {
+                    currCount--;
+                }
                 left++;
-                if (tCount.containsKey(c) && tCount.get(c).intValue() > window.get(c).intValue()) formed--;
             }
         }
-        return (ans == Integer.MAX_VALUE) ? "" : s.substring(start, end + 1);
+        return (len == s.length() + 1) ? "" : s.substring(minLeft, minRight + 1);
     }
 }
