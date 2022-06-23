@@ -14,31 +14,23 @@
  * }
  */
 class Solution {
-    private int preIndx = 0;
-    private int size;
-    private int[] preOrder;
-    private int[] inOrder;
-    
+    int preIndx = 0;
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        preOrder = preorder;
-        inOrder = inorder;
-        size = preorder.length;
-        HashMap<Integer, Integer> preToIn = new HashMap<>();
-        for (int i = 0; i < size; i++) {
-            preToIn.put(inorder[i], i);
+        HashMap<Integer, Integer> inorderIndx = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            inorderIndx.put(inorder[i], i);
         }
-        
-        TreeNode ans = buildAux(preToIn, 0, size - 1);
-        return ans;
+        return buildAux(preorder, inorder, inorderIndx, 0, inorder.length - 1);
     }
     
-    public TreeNode buildAux(HashMap<Integer, Integer> preToIn, int left, int right) {
+    public TreeNode buildAux(int[] preorder, int[] inorder, HashMap<Integer, Integer> inorderIndx, int left, int right) {
         if (left > right) return null;
-        TreeNode node = new TreeNode(preOrder[preIndx]);
+        int rootVal = preorder[preIndx];
+        int inIndx = inorderIndx.get(rootVal);
+        TreeNode root = new TreeNode(rootVal);
         preIndx++;
-        int inOrderIndx = preToIn.get(node.val);
-        node.left = buildAux(preToIn, left, inOrderIndx - 1);
-        node.right = buildAux(preToIn, inOrderIndx + 1, right);
-        return node;
+        root.left = buildAux(preorder, inorder, inorderIndx, left, inIndx - 1);
+        root.right = buildAux(preorder, inorder, inorderIndx, inIndx + 1, right);
+        return root;
     }
 }
