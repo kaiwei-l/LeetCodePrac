@@ -15,24 +15,15 @@
  */
 class Solution {
     public boolean isSubtree(TreeNode root, TreeNode subRoot) {
-        ArrayDeque<TreeNode> q = new ArrayDeque<>();
-        q.addLast(root);
-        while (!q.isEmpty()) {
-            TreeNode node = q.removeFirst();
-            if (node.left != null) q.addLast(node.left);
-            if (node.right != null) q.addLast(node.right);
-            if (node.val == subRoot.val && isIdentical(node, subRoot)) return true;
-        }
-        return false;
+        if (root == null && subRoot == null) return true;
+        if (subRoot == null || root == null) return false;
+        if (root.val == subRoot.val && check(root, subRoot)) return true;
+        return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
     }
     
-    public boolean isIdentical(TreeNode node1, TreeNode node2) {
-        if (node1 == null && node2 == null) {
-            return true;
-        } else if (node1 == null || node2 == null) {
-            return false;
-        } else {
-            return node1.val == node2.val && isIdentical(node1.left, node2.left) && isIdentical(node1.right, node2.right);
-        }
+    public boolean check(TreeNode root, TreeNode subRoot) {
+        if (root == null && subRoot == null) return true;
+        if (root == null || subRoot == null) return false;
+        return (root.val == subRoot.val) && check(root.left, subRoot.left) && check(root.right, subRoot.right);
     }
 }
