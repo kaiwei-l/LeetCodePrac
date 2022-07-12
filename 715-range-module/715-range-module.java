@@ -10,7 +10,7 @@ class RangeModule {
         if (start != null && map.get(start) >= left) left = start;
         if (end != null && map.get(end) > right) right = map.get(end);
         map.put(left, right);
-        map.subMap(left, false, right, true).clear();
+        map.subMap(left, false, right, false).clear();
     }
     
     public boolean queryRange(int left, int right) {
